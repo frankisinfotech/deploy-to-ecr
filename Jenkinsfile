@@ -22,6 +22,11 @@ pipeline {
         sh './kubectl version --client'
       }
     }
+
+    stage ('deploy to cluster') {
+      steps {
+        sh 'aws eks update-kubeconfig --region eu-west-1 --name ekscluster'
+        sh './kubectl apply -f -'
     
   }
 }

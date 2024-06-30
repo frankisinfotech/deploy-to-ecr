@@ -1,5 +1,10 @@
 pipeline {
   agent any
+
+  environment {
+    REPOSITORY_TAG = "765176032689.dkr.ecr.eu-west-1.amazonaws.com/merchantapi:$BUILD_ID"
+  }
+  
   stages {
     
     stage ('Build Private ECR') {
@@ -26,7 +31,7 @@ pipeline {
     stage ('deploy to cluster') {
       steps {
         sh 'aws eks update-kubeconfig --region eu-west-1 --name ekscluster'
-        sh './kubectl apply -f -'
+        sh 'envsubst < ${WORKSPACE}/deploy.yaml | ./kubectl apply -f -'
     
   }
 }
